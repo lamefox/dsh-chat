@@ -1,7 +1,7 @@
 {
-  "name": "dsh-chat",
-  "version": "0.4.0",
-  "description": "Standalone chat-demo style chat window for DSH: serves its own page and proxies the DeepSeek Messages API with server-side search, link reading, safety check and titles.",
+  "name": "@lamefox/dsh-chat",
+  "version": "0.5.0",
+  "description": "Standalone chat-demo style chat window for DSH: server-side web search, link reading, safety check and titles, SQLite transcripts with FTS5, and workspaces that group conversations.",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
@@ -30,7 +30,6 @@
     "deepseek"
   ],
   "license": "MIT",
-  "private": true,
   "scripts": {
     "test": "node --test && node test/smoke.mjs",
     "test:unit": "node --test",
@@ -46,5 +45,8 @@
   "bugs": {
     "url": "https://github.com/lamefox/dsh-chat/issues"
   },
-  "author": "lamefox"
+  "author": "lamefox",
+  "publishConfig": {
+    "access": "public"
+  }
 }

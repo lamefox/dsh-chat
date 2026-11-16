@@ -17,7 +17,7 @@ https://cdn.jsdelivr.net/gh/lamefox/dsh-chat@main/market/index.json
 然后在市场里搜索 `dsh-chat` 一键安装；或者直接：
 
 ```sh
-dsh plugin --profile web add https://github.com/lamefox/dsh-chat
+dsh plugin --profile web add @lamefox/dsh-chat
 ```
 
 
@@ -25,7 +25,7 @@ dsh plugin --profile web add https://github.com/lamefox/dsh-chat
 
 ```sh
 # 收到 dsh-chat-0.4.0.tgz 后
-dsh plugin --profile web add ./dsh-chat-0.4.0.tgz
+dsh plugin --profile web add ./lamefox-dsh-chat-0.5.0.tgz
 dsh web                      # 重启后生效
 ```
 
@@ -47,7 +47,7 @@ DSH 的市场不是"提交审核"，而是**索引源 + 安装目标**：宿主�
 
    ```sh
    # 去掉 package.json 的 "private": true，并让 name 与 cordis.patch.yml 里的 name 一致
-   npm publish --access public
+   npm publish --access public   # 已配置 publishConfig.access
    ```
 
 2. 更新 `market/index.json` 里的 `name` / `version` / `publishTimestamp`（Unix 秒）/ `engines.dsh`。
@@ -67,7 +67,7 @@ DSH 的市场不是"提交审核"，而是**索引源 + 安装目标**：宿主�
 ### 自己打包分发
 
 ```sh
-npm run pack     # 生成 dsh-chat-0.4.0.tgz（约 45 KB，9 个文件）
+npm run pack     # 生成 lamefox-dsh-chat-0.5.0.tgz
 npm run dist     # 额外生成 sha256 校验文件
 ```
 
@@ -78,7 +78,7 @@ npm run dist     # 额外生成 sha256 校验文件
 
 ```sh
 # 从本机目录安装到 web profile
-dsh plugin --profile web add file:/home/lamefox/dsh-chat
+dsh plugin --profile web add link:/home/lamefox/dsh-chat
 
 # 重启 web（或在 HMR 生效后刷新页面）
 dsh web

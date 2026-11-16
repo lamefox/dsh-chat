@@ -29,7 +29,7 @@
   },
   "plugins": [
     {
-      "name": "dsh-chat",
+      "name": "@lamefox/dsh-chat",
       "title": {
         "en": "dsh-chat",
         "zh": "dsh-chat 独立对话窗口"
@@ -59,7 +59,7 @@
       },
       "versions": [
         {
-          "version": "0.4.0",
+          "version": "0.5.0",
           "publishTimestamp": 1794795501,
           "source": {
             "type": "git",
