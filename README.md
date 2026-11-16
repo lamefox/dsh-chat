@@ -11,21 +11,24 @@ DSH 插件：在已运行的 DSH Web 服务器上**另开一个独立聊天窗�
 在 DSH 的 **插件 → Discover → Index sources** 添加：
 
 ```
-https://cdn.jsdelivr.net/gh/lamefox/dsh-chat@main/market/index.json
+https://cdn.jsdelivr.net/npm/@lamefox/dsh-chat/market/index.json
 ```
 
-然后在市场里搜索 `dsh-chat` 一键安装；或者直接：
+然后搜索 `@lamefox/dsh-chat` 一键安装；或者直接：
 
 ```sh
 dsh plugin --profile web add @lamefox/dsh-chat
 ```
 
+索引随 npm 包一起发布（包内 `market/index.json`，包不可变、无需 CDN 刷新），所以索引里的版本永远等于当前发布版本。国内镜像尚未同步时可临时指定官方源：
+`dsh plugin --profile web add @lamefox/dsh-chat --config.registry=https://registry.npmjs.org`
+
 
 ### 从他人分享的压缩包安装
 
 ```sh
-# 收到 lamefox-dsh-chat-0.5.0.tgz 后
-dsh plugin --profile web add ./lamefox-dsh-chat-0.5.0.tgz
+# 收到 lamefox-dsh-chat-0.5.1.tgz 后
+dsh plugin --profile web add ./lamefox-dsh-chat-0.5.1.tgz
 dsh web                      # 重启后生效
 ```
 
@@ -67,7 +70,7 @@ DSH 的市场不是"提交审核"，而是**索引源 + 安装目标**：宿主�
 ### 自己打包分发
 
 ```sh
-npm run pack     # 生成 lamefox-dsh-chat-0.5.0.tgz
+npm run pack     # 生成 lamefox-dsh-chat-0.5.1.tgz
 npm run dist     # 额外生成 sha256 校验文件
 ```
 
