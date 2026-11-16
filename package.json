@@ -1,6 +1,6 @@
 {
   "name": "@lamefox/dsh-chat",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Standalone chat-demo style chat window for DSH: server-side web search, link reading, safety check and titles, SQLite transcripts with FTS5, and workspaces that group conversations.",
   "type": "module",
   "main": "lib/index.js",
