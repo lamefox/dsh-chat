@@ -343,6 +343,61 @@ const cleared = await json(await fetch(`${origin}/chat/api/sessions`, { method: 
 assert.equal(cleared.removed, 1, 'clear-all removes every conversation')
 assert.equal((await json(await fetch(`${origin}/chat/api/sessions`, { headers: auth }))).sessions.length, 0)
 
+// 9. account auth: the grant header replaces the API key when the account is signed in
+const accountRoutes = []
+let accountToken = 'dsh-account-token'
+const accountCtx = {
+  webServer: {
+    register(route) {
+      accountRoutes.push(route)
+      return () => {}
+    },
+    getOrigin() {
+      return `http://127.0.0.1:${accountServer.address().port}`
+    },
+  },
+  logger: () => ({ info() {}, warn() {} }),
+  effect: (factory) => factory(),
+  // stand-in for ctx.deepseekAccount; resolveToken is origin-scoped in the real service
+  get: (name) => (name === 'deepseekAccount' ? { resolveToken: async (url) => (String(url).startsWith('http://127.0.0.1') ? accountToken : undefined) } : undefined),
+}
+apply(accountCtx, { apiKey: 'unused-key', baseUrl: upstreamUrl, openBrowser: 'never' })
+const accountServer = http.createServer(async (req, res) => {
+  const url = new URL(req.url, 'http://localhost')
+  const route =
+    accountRoutes.find((entry) => entry.kind === 'exact' && entry.path === url.pathname) ??
+    accountRoutes.find((entry) => entry.kind === 'prefix' && (url.pathname === entry.path || url.pathname.startsWith(`${entry.path}/`)))
+  await route.handler(req, res)
+})
+await new Promise((resolve) => accountServer.listen(0, '127.0.0.1', resolve))
+const accountOrigin = `http://127.0.0.1:${accountServer.address().port}`
+const accountPage = await (await fetch(`${accountOrigin}/chat`)).text()
+const accountPageToken = /name="dsh-chat-token" content="([^"]+)"/.exec(accountPage)[1]
+
+received = null
+await (await fetch(`${accountOrigin}/chat/api/messages`, {
+  method: 'POST',
+  headers: { 'content-type': 'application/json', 'x-dsh-chat-token': accountPageToken },
+  body: JSON.stringify({ messages: [{ role: 'user', content: 'hi' }] }),
+})).text()
+assert.equal(received.headers['x-dsh-auth-token'], 'dsh-account-token', 'account grant is sent on the grant header')
+assert.equal(received.headers['x-api-key'], undefined, 'the API key header is not sent in account mode')
+
+const accountState = await (await fetch(`${accountOrigin}/chat/api/state`, { headers: { 'x-dsh-chat-token': accountPageToken } })).json()
+assert.equal(accountState.authKind, 'account')
+assert.equal(accountState.hasAuth, true)
+
+// account unavailable -> falls back to the API key
+accountToken = undefined
+await (await fetch(`${accountOrigin}/chat/api/messages`, {
+  method: 'POST',
+  headers: { 'content-type': 'application/json', 'x-dsh-chat-token': accountPageToken },
+  body: JSON.stringify({ messages: [{ role: 'user', content: 'hi' }] }),
+})).text()
+assert.equal(received.headers['x-api-key'], 'unused-key', 'falls back to the API key when the grant is missing')
+assert.equal(received.headers['x-dsh-auth-token'], undefined)
+
+accountServer.close()
 for (const closeable of [server, upstream, failingServer, failing]) closeable.close()
 rmSync(storeHome, { recursive: true, force: true })
-console.log('dsh-chat smoke: 20 checks passed')
+console.log('dsh-chat smoke: 24 checks passed')

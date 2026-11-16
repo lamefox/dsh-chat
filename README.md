@@ -106,6 +106,7 @@ dsh plugin --profile web remove dsh-chat
     path: /chat                 # 挂载路径
     model: deepseek-flash       # 默认模型（页面可用 state 里的值覆盖）
     baseUrl: https://api.deepseek.com/anthropic/v1
+    auth: auto                  # auto | apiKey | account（auto：先试账号登录，再回落 API Key）
     apiKeyEnv: DEEPSEEK_API_KEY # Key 从这里读，其次 credentials 服务，最后 apiKey
     apiKey: null                # 不建议：明文写在配置里
     safetyCheck: high           # high | off（部署级，页面不可改）
@@ -117,7 +118,19 @@ dsh plugin --profile web remove dsh-chat
     allowRemote: false          # true 才允许非 loopback 客户端访问
 ```
 
-Key 的解析顺序：`apiKey` → 环境变量 `apiKeyEnv` → `ctx.credentials.resolve(apiKeyEnv)`。都不存在时页面顶部显示「未配置 API Key」，代理返回 503 并说明怎么配。
+### 认证方式
+
+设置 → 模型 页面里有两套凭据，dsh-chat 走 `auth` 配置决定用哪套：
+
+| `auth` | 行为 |
+|---|---|
+| `auto`（默认） | 先试 **DeepSeek 账号登录**（`deepseekAccount.resolveToken`，请求头 `x-dsh-auth-token`）；拿不到再回落 API Key |
+| `apiKey` | 只用 API Key（`x-api-key`），忽略账号登录 |
+| `account` | 只用账号登录；未登录时直接 503 并提示去设置里登录 |
+
+账号 token 只对配置的推理源生效（默认 `https://api.deepseek.com`）；自定义 `baseUrl` 会自动跳过账号、回落 API Key。
+
+Key 的解析顺序：`apiKey` 配置 → 环境变量 `apiKeyEnv` → `ctx.credentials.resolve(apiKeyEnv)`。都不存在时页面顶部显示「未配置 API Key」，代理返回 503 并说明怎么配。
 
 ## 已实现（对照 chat-demo）
 

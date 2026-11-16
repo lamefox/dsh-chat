@@ -11,5 +11,6 @@
       name: '@lamefox/dsh-chat'
       config:
         path: /chat
+        auth: auto          # auto | apiKey | account
         model: deepseek-flash
         openBrowser: once
