@@ -60,11 +60,11 @@
       "versions": [
         {
           "version": "0.5.0",
-          "publishTimestamp": 1794795501,
+          "publishTimestamp": 1794797236,
           "source": {
             "type": "git",
             "url": "https://github.com/lamefox/dsh-chat",
-            "commit": "a393305a5d30efca8b97fb7555e56091979a6d78"
+            "commit": "be3d4909bc51132b53e80a8727e6f0c52fd8d1f2"
           },
           "engines": {
             "dsh": ">=0.2.0-rc.1 <0.3.0-0"
