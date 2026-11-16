@@ -1,0 +1,40 @@
+{
+  "format": 1,
+  "title": { "en": "dsh-chat", "zh": "dsh-chat" },
+  "description": {
+    "en": "A standalone chat window for DSH with durable SQLite history, workspaces, server-side search and citations.",
+    "zh": "DSH 的独立聊天窗口：SQLite 持久化、工作区归纳、服务端联网搜索与引用。"
+  },
+  "metadata": {
+    "categories": { "chat": { "title": { "en": "Chat", "zh": "对话" } } },
+    "labels": { "sqlite": { "title": { "en": "SQLite", "zh": "SQLite 存储" } } },
+    "sortKeys": {}
+  },
+  "plugins": [
+    {
+      "name": "dsh-chat",
+      "title": { "en": "dsh-chat", "zh": "dsh-chat 独立对话窗口" },
+      "description": {
+        "en": "Standalone chat window served by the DSH host: web search, link reading, safety check and titles injected server-side; SQLite transcripts with full-text search; workspace grouping.",
+        "zh": "由 DSH 宿主托管的独立对话窗口：服务端注入联网搜索/读链接/内容安全/标题；SQLite 持久化 + 全文检索；工作区归纳会话。"
+      },
+      "author": "lamefox",
+      "homepage": "https://github.com/lamefox/dsh-chat",
+      "repository": { "url": "https://github.com/lamefox/dsh-chat" },
+      "metadata": {
+        "category": "chat",
+        "keywords": ["chat", "deepseek", "sqlite", "search", "citations"],
+        "labels": ["sqlite"],
+        "sortKeys": {}
+      },
+      "versions": [
+        {
+          "version": "0.4.0",
+          "publishTimestamp": 1794793500,
+          "source": { "type": "npm" },
+          "engines": { "dsh": ">=0.2.0-rc.1 <0.3.0-0" }
+        }
+      ]
+    }
+  ]
+}

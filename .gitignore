@@ -1,0 +1,8 @@
+node_modules/
+*.tgz
+*.tgz.sha256
+*.log
+.DS_Store
+chat.db
+chat.db-wal
+chat.db-shm

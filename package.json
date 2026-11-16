@@ -1,0 +1,50 @@
+{
+  "name": "dsh-chat",
+  "version": "0.4.0",
+  "description": "Standalone chat-demo style chat window for DSH: serves its own page and proxies the DeepSeek Messages API with server-side search, link reading, safety check and titles.",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "market",
+    "cordis.patch.yml",
+    "README.md"
+  ],
+  "engines": {
+    "dsh": ">=0.2.0-rc.1 <0.3.0-0",
+    "node": "^22.19.0 || >=24.0.0"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "chat",
+    "deepseek"
+  ],
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "test": "node --test && node test/smoke.mjs",
+    "test:unit": "node --test",
+    "test:proxy": "node test/smoke.mjs",
+    "pack": "rm -f dsh-chat-*.tgz && npm pack",
+    "dist": "npm run pack && sha256sum dsh-chat-*.tgz > dsh-chat-*.tgz.sha256"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lamefox/dsh-chat.git"
+  },
+  "homepage": "https://github.com/lamefox/dsh-chat#readme",
+  "bugs": {
+    "url": "https://github.com/lamefox/dsh-chat/issues"
+  },
+  "author": "lamefox"
+}

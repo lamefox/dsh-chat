@@ -1,0 +1,15 @@
+# dsh-chat: an independent chat window served by the DSH web server.
+#
+# The plugin mounts one host-side plugin that registers /chat (page) and
+# /chat/api/* (proxy) on the existing web server, then opens that URL in a
+# separate browser window at startup.
+#
+# Install:  dsh plugin --profile web add ./dsh-chat
+# Remove:   dsh plugin --profile web remove dsh-chat
+- insert:
+    - id: dsh-chat
+      name: 'dsh-chat'
+      config:
+        path: /chat
+        model: deepseek-flash
+        openBrowser: once
