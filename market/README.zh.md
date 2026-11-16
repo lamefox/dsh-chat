@@ -2,9 +2,9 @@
 
 | 用途 | URL |
 |---|---|
-| 自建索引源（GitHub raw，立即可用） | `https://raw.githubusercontent.com/lamefox/dsh-chat/main/market/index.json` |
-| 自建索引源（jsDelivr 镜像，更快） | `https://cdn.jsdelivr.net/gh/lamefox/dsh-chat@main/market/index.json` |
-| 直接安装（不走市场） | `dsh plugin --profile web add https://github.com/lamefox/dsh-chat` |
+| 自建索引源（npm 包内，推荐） | `https://cdn.jsdelivr.net/npm/@lamefox/dsh-chat/market/index.json` |
+| 自建索引源（GitHub 分支，可能有 CDN 缓存延迟） | `https://cdn.jsdelivr.net/gh/lamefox/dsh-chat@main/market/index.json` |
+| 直接安装（不走市场） | `dsh plugin --profile web add @lamefox/dsh-chat` |
 
 ## 在 DSH 里加源
 
