@@ -24,7 +24,7 @@ dsh plugin --profile web add @lamefox/dsh-chat
 ### 从他人分享的压缩包安装
 
 ```sh
-# 收到 dsh-chat-0.4.0.tgz 后
+# 收到 lamefox-dsh-chat-0.5.0.tgz 后
 dsh plugin --profile web add ./lamefox-dsh-chat-0.5.0.tgz
 dsh web                      # 重启后生效
 ```
@@ -73,7 +73,7 @@ npm run dist     # 额外生成 sha256 校验文件
 
 包内只含 `lib/`、`cordis.patch.yml`、`README.md`、`package.json`；`test/` 与本地数据库不会进入包。
 
-**改名或发 npm 时注意**：`package.json` 的 `name` 必须与 `cordis.patch.yml` 里 `name:` 完全一致，否则宿主找不到插件；发公开源要先删掉 `private: true`，建议加 scope（如 `@you/dsh-chat`）并同步改 patch。
+**改名或发 npm 时注意**：`package.json` 的 `name` 必须与 `cordis.patch.yml` 里 `name:` 完全一致（当前都是 `@lamefox/dsh-chat`），否则宿主找不到插件；发公开源要先删掉 `private: true`，建议加 scope（如 `@you/dsh-chat`）并同步改 patch。
 
 
 ```sh
