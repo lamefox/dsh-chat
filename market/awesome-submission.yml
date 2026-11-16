@@ -1,0 +1,9 @@
+# PR payload for https://github.com/awesome-dsh-plugin/awesome-dsh-plugin
+# Target path: data/plugins/lamefox__dsh-chat.yml
+url: https://github.com/lamefox/dsh-chat
+name: lamefox/dsh-chat
+category: session
+description:
+  en: 'A standalone chat window served by the DSH host: server-side web search, link reading, safety check and titles, SQLite transcripts with full-text search, and workspaces that group conversations.'
+  zh: '由 DSH 宿主托管的独立对话窗口：服务端联网搜索、阅读链接、内容安全与标题，SQLite 持久化 + 全文检索，并用工作区归纳会话。'
+# icon: 可选，省略时使用作者头像

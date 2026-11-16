@@ -6,6 +6,21 @@ DSH 插件：在已运行的 DSH Web 服务器上**另开一个独立聊天窗�
 
 ## 安装
 
+### 从市场安装
+
+在 DSH 的 **插件 → Discover → Index sources** 添加：
+
+```
+https://cdn.jsdelivr.net/gh/lamefox/dsh-chat@main/market/index.json
+```
+
+然后在市场里搜索 `dsh-chat` 一键安装；或者直接：
+
+```sh
+dsh plugin --profile web add https://github.com/lamefox/dsh-chat
+```
+
+
 ### 从他人分享的压缩包安装
 
 ```sh
