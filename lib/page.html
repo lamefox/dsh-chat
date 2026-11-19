@@ -5,6 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="dsh-chat-token" content="__DSH_CHAT_TOKEN__" />
     <title>dsh-chat</title>
+    <script>
+      // 内嵌模式：DSH 右栏 iframe 会带 ?embed=1 打开本页，此时隐藏我们自己的侧栏与顶栏。
+      // 写在样式表之前，避免先画出再隐藏的闪动。
+      try {
+        if (new URLSearchParams(location.search).get('embed') === '1') {
+          document.documentElement.classList.add('embed');
+        }
+      } catch (error) {
+        /* 老浏览器忽略即可 */
+      }
+    </script>
     <link rel="stylesheet" href="__DSH_CHAT_PATH__/style.css" />
   </head>
   <body>

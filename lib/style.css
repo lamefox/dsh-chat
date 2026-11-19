@@ -1138,3 +1138,34 @@ button.ghost:hover {
     grid-template-columns: 1fr;
   }
 }
+
+/* ── 内嵌模式（?embed=1）──────────────────────────────────────────────────────
+   DSH 右栏 iframe 里的形态：宿主已经有侧栏和标题栏，这里只留对话本体。
+   正文列宽放开成 100%，因为面板本身只有 400–600px。 */
+html.embed {
+  --column: 100%;
+}
+
+/* 侧栏改成抽屉：默认收起（app.js 启动时置 hidden），点左上角按钮浮出覆盖在对话上，
+   不再挤压本来就只有 400–600px 的面板宽度。 */
+html.embed #sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 40;
+  width: 280px;
+  max-width: 86vw;
+  box-shadow: 0 10px 40px rgb(0 0 0 / 22%);
+}
+
+html.embed #topbar {
+  min-height: 44px;
+  padding: 6px 12px;
+}
+
+html.embed .messages {
+  padding: 8px 12px 8px;
+}
+
+html.embed .scroll-down {
+  right: 12px;
+}

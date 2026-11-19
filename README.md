@@ -170,6 +170,30 @@ Key 的解析顺序：`apiKey` 配置 → 环境变量 `apiKeyEnv` → `ctx.cred
 - 输入区 24px 圆角卡片 + 两个 pill（深度思考默认关、智能搜索默认开）+ 圆形发送/停止
 - 右下角悬浮「回到底部」按钮、顶部免责声明、浅色/深色主题、≤860px 侧栏转浮层
 
+## 内嵌到 DSH 界面（0.6.0）
+
+插件带一个浏览器端入口（`lib/client.js`，无构建、无 npm 依赖），把对话嵌进 DSH 自己的界面：
+
+- 左侧栏页脚多一个「对话」按钮（`sidebar.footer.action`，list 槽）；
+- 点它会在右侧栏开一个 `dsh-chat` 标签页（`sidebarRightTabs` + `sidebar.right.pane.tab`），
+  面板内容是一个 iframe，指向 `{origin}/chat?embed=1`；
+- `?embed=1` 时页面隐藏自己的顶栏、把 260px 侧栏改成抽屉，正文铺满面板宽度。
+
+对话逻辑、SSE、SQLite 全在 iframe 里那份页面中，**与独立 `/chat` 页面是同一份代码**，
+所以两边数据天然一致（都走服务端 `chat.db`）。
+
+实现上有两处必须照宿主规矩来，否则整页会停在启动失败卡片：
+
+1. `apply` 里任何注册抛错都会被宿主记成 `1 entry did not activate`，界面直接白屏。
+   因此每一步都包在 `step(name, run)` 里，失败只打印一条 console 错误，不影响宿主。
+2. `sidebar.footer.action` 由 `@deepseek-ai/dsh-client-ui-sidebar` 的工厂**声明**，
+   而它和本插件可能落在不同的启动批次；注册太早会抛
+   `slot "sidebar.footer.action" is not declared`。这里按 60/200/600/1500/3000ms 退避重试，
+   最多约 5 秒；仍不出现就安静跳过（独立页面不受影响）。
+
+想关掉内嵌：删掉 `package.json` 里的 `dsh.client` 字段（或 `exports["./client"]`）后重启 web，
+`/chat` 仍然可以单独打开。
+
 ## 持久化（0.3.0，SQLite）
 
 默认把会话写进**本机 SQLite 数据库**（不是浏览器）：
@@ -261,13 +285,15 @@ POST   /chat/api/import                    导入浏览器数据
 ## 质量与测试
 
 ```sh
-npm test          # 9 个单测 + 8 项代理端到端检查
+npm test          # 27 个单测 + 24 项代理端到端检查
 npm run test:unit # 只跑 lib/text.js 的纯函数测试
 node test/smoke.mjs
 ```
 
 - `lib/text.js` 是转义 / markdown-lite / 回答分段合并的规范实现，纯函数、无 DOM，可直接 `node --test`。
 - `lib/app.js` 内联同一份实现（页面自包含，宿主不重启也能渲染），单测里有一项**字节级漂移守卫**：两份副本一旦不一致即失败。
+- `test/client.test.mjs` 在 `node:vm` 里跑客户端 bundle：验证入口形状、三个槽位注册点、
+  缺服务时安静退场、**任一注册抛错不冒泡**、以及「槽位未声明→退避重试」这条回归。
 - `test/smoke.mjs` 用假上游验证代理：页面/token、静态资源、401/405、`tools` 收窄、`safety_check`/`title` 注入、SSE 透传、上游错误透传、state 不泄露 key。
 
 流式渲染只重绘当前那一条回答（80 条消息、1840 个 DOM 节点的实测）：
@@ -297,6 +323,6 @@ node test/smoke.mjs
 ## 已知限制
 
 1. 不经过 DSH agent：没有工具调用、技能、沙箱与工作区上下文——这正是它与「DSH 主界面」的分工。
-2. 会话存在浏览器 `localStorage`，不写 DSH 的 session 日志；换浏览器或清缓存即丢失（可用导出 JSON 备份）。
+2. 会话存在本机 SQLite（`$DSH_HOME/dsh-chat/chat.db`），不写 DSH 的 session 日志；换机器需自行导出/导入。
 3. 附件 `file_id` 由服务端保管，本地只存引用；删除服务端文件后历史里的引用会失效。
 4. `openBrowser: once` 与 DSH 自己的「自动打开主界面」是两件事，用 `dsh web --no-open` 只关掉 DSH 那个。
